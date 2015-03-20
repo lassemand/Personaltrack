@@ -2,33 +2,31 @@ package com.lma.pt;
 
 import java.net.UnknownHostException;
 
-import org.bson.types.ObjectId;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
+
+import com.lma.pt.service.PTObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
-public class Test {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-        MongoClient mongoClient;
-		try {
-			mongoClient = new MongoClient( "localhost" , 27017 );
-	        // Now connect to your databases
-	        DB db = mongoClient.getDB("pt");
-	        DBCollection collection = db.getCollection("team");
-	        BasicDBObject whereQuery = new BasicDBObject().append("_id", new ObjectId("54cb4b8dccc5aadcdf4a6c23"));
-	        DBCursor cursor = collection.find(whereQuery);
-	    	while(cursor.hasNext()) {
-	    	    System.out.println(cursor.next());
-	    	}
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+@Path("test")
+@Produces("application/json")
+public class Test extends ModelClassesParent{
+	
+	@DELETE
+	@Path("removeObjects")
+	public Response deleteDevice(@QueryParam("id") String id){
+		service.removeObjects();
+		return Response.status(200).build();
 	}
 
 }
