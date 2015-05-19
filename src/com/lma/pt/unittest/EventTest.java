@@ -17,7 +17,7 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class EventTest extends TestParent{
 
-	private String mapId, eventId1, eventId2, teamId, runnerId, deviceId1, deviceId2;
+	private String mapId, eventId1, eventId2, deviceId1, deviceId2;
 	
 	public EventTest() throws NoSuchMethodException, SecurityException, JSONException{
 		super();
@@ -124,31 +124,16 @@ public class EventTest extends TestParent{
 	}
 	
 	private void initialize2() throws NoSuchMethodException, SecurityException, IOException, JSONException{
-		JSONObject team = new JSONObject();
-		team.put("name", "first");
-		Method method = getClass().getMethod("saveTeamId1", new Class[]{String.class});
-		sendRequest(makeJSONPost(team.toString(), getPathByAddingContent("team")), createMethod(method, new Object[]{this}));
-		JSONObject runner1 = new JSONObject();
-		runner1.put("name", "runner1");
-		runner1.put("team", teamId);
-		runner1.put("username", "user1");
-		runner1.put("password", "asdasd");
-		JSONObject runner2 = new JSONObject();
-		runner2.put("name", "runner2");
-		runner2.put("team", teamId);
-		runner1.put("username", "user2");
-		runner1.put("password", "asdasd");
-		method = getClass().getMethod("saveRunnerId1", new Class[]{String.class});
-		sendRequest(makeJSONPost(runner1.toString(), getPathByAddingContent("runner")),  createMethod(method, new Object[]{this}));
+		
 		JSONObject device1 = new JSONObject();
 		device1.put("identifier", "test1");
 		device1.put("name", "device1");
-		device1.put("runner", runnerId);
+		device1.put("runner", runner1.getString("_id"));
 		JSONObject device2 = new JSONObject();
 		device2.put("identifier", "test2");
 		device2.put("name", "device2");
-		device2.put("runner", runnerId);
-		method = getClass().getMethod("saveDeviceId1", new Class[]{String.class});
+		device2.put("runner", runner1.getString("_id"));
+		Method method = getClass().getMethod("saveDeviceId1", new Class[]{String.class});
 		sendRequest(makeJSONPost(device1.toString(), getPathByAddingContent("device")), createMethod(method, new Object[]{this}));
 		method = getClass().getMethod("saveDeviceId2", new Class[]{String.class});
 		sendRequest(makeJSONPost(device2.toString(), getPathByAddingContent("device")), createMethod(method, new Object[]{this}));
@@ -209,12 +194,6 @@ public class EventTest extends TestParent{
 	}
 	public void createEvent2(String id){
 		this.eventId2 = id;
-	}
-	public void saveTeamId1(String id){
-		this.teamId = id;
-	}
-	public void saveRunnerId1(String id){
-		this.runnerId = id;
 	}
 	public void saveDeviceId1(String id){
 		this.deviceId1 = id;

@@ -31,7 +31,10 @@ public class CorsFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, HEAD, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
         String username = request.getHeader("user");
         String token = request.getHeader("token");
         boolean allowed = false; 
@@ -46,17 +49,13 @@ public class CorsFilter implements Filter {
         }
         if(!allowed)
         allowed = Security.getInstance().validateKey(token, username);
-        if(allowed){
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, HEAD, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+        if(!allowed){
+        	response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
         else{
-        	response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        	
+        	filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+        
     }
 
     @Override
