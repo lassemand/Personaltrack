@@ -3,10 +3,10 @@ package com.lma.pt.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,7 +30,7 @@ public class ImageValidater {
 		String suffix = object.getString("suffix");
 		File f = File.createTempFile("tmp", suffix);
 		FileOutputStream fos = new FileOutputStream(f.getAbsolutePath());
-		byte[] data = Base64.decodeBase64(base64);
+		byte[] data = Base64.getDecoder().decode(base64);
 		fos.write(data);
 		fos.close();
 		Ocr ocr = new Ocr();
