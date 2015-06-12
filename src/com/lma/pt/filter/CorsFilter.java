@@ -53,7 +53,7 @@ public class CorsFilter implements Filter {
         	response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
         else{
-        	filterChain.doFilter(request, response);
+        	filterChain.doFilter(request, response);	
         }
         
     }

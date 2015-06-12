@@ -140,6 +140,41 @@ public class Service {
 		return cursorToArray(cursor);
 	}
 	
+	public String allRunners(){
+		try {
+			return removePassword(getAllPtObject(PTObject.RUNNER)).toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public String allRunnersFromTeam(String id){
+		try {
+			return removePassword(getPtObjectFromRelation(PTObject.RUNNER, new BasicDBObject("team", id))).toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+		
+	}
+	
+	private JSONArray removePassword(String objects) throws JSONException{
+		JSONArray array = new JSONArray(objects);
+		for(int a = 0; a<array.length(); a++){
+			try {
+				JSONObject object = array.getJSONObject(a);
+				object.remove("password");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return array;
+	}
+	
 	public String getMap(PTObject ptObject, String s) {
 		String map = getPtObject(ptObject, s);
 		if (map.equals(""))
